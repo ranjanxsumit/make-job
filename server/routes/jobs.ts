@@ -128,7 +128,10 @@ function normalizeCompanyName(s: string) {
 function getLogoForCompany(company: string): string {
   const slug = normalizeCompanyName(company || "");
   const localPath = `/logos/${slug}.png`;
-  const diskPath = path.resolve(__dirname, "..", "..", "public", "logos", `${slug}.png`);
+  // __dirname is not available in ESM builds (node ESM). Use process.cwd() which points to
+  // the repository root when running the built server (e.g. Render/PM2). This avoids
+  // ReferenceError: __dirname is not defined in production builds.
+  const diskPath = path.resolve(process.cwd(), "public", "logos", `${slug}.png`);
   try {
     if (fs.existsSync(diskPath)) return localPath;
   } catch (e) {
