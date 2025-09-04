@@ -1,13 +1,15 @@
 import Layout from "@/components/layout/Layout";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { JobInput, JobType } from "@shared/api";
 import { useNavigate } from "react-router-dom";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 
 export default function CreateJobPage() {
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<JobInput>();
 
@@ -47,18 +49,48 @@ export default function CreateJobPage() {
             </label>
             <label className="space-y-1">
               <span className="text-sm font-medium">Location</span>
-              <input className="w-full rounded-md border border-gray-200 px-3 py-2" {...register("location", { required: true })} />
+              <Controller
+                control={control}
+                name="location"
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <Select value={field.value ?? ""} onValueChange={(v) => field.onChange(v)}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Preferred Location" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Bangalore">Bangalore</SelectItem>
+                      <SelectItem value="Chennai">Chennai</SelectItem>
+                      <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                      <SelectItem value="Delhi">Delhi</SelectItem>
+                      <SelectItem value="Mumbai">Mumbai</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
               {errors.location && <span className="text-xs text-red-600">Required</span>}
             </label>
             <label className="space-y-1">
               <span className="text-sm font-medium">Job Type</span>
-              <select className="w-full rounded-md border border-gray-200 px-3 py-2" {...register("jobType", { required: true })}>
-                {(["Full-time", "Part-time", "Contract", "Internship"] as JobType[]).map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
+              <Controller
+                control={control}
+                name="jobType"
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <Select value={field.value ?? ""} onValueChange={(v) => field.onChange(v)}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select job type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {(["Full-time", "Part-time", "Contract", "Internship"] as JobType[]).map((t) => (
+                        <SelectItem key={t} value={t}>
+                          {t}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
               {errors.jobType && <span className="text-xs text-red-600">Required</span>}
             </label>
             <label className="space-y-1">

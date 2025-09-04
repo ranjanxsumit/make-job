@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Slider } from "@/components/ui/slider";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 
 export interface Filters {
   title?: string;
@@ -29,33 +30,33 @@ export function FilterBar({ value, onChange }: { value: Filters; onChange: (f: P
       <div className="h-px bg-gray-100 md:h-10 md:w-px" />
       <div className="flex items-center gap-3 flex-1">
         <img src="/logos/Location.svg" alt="Location" className="h-5 w-5" />
-        <select
-          className="w-full outline-none text-gray-700 rounded-xl"
-          value={value.location ?? ""}
-          onChange={(e) => onChange({ ...value, location: e.target.value })}
-        >
-          <option value="">Preferred Location</option>
-          <option>Bangalore</option>
-          <option>Chennai</option>
-          <option>Hyderabad</option>
-          <option>Delhi</option>
-          <option>Mumbai</option>
-        </select>
+        <Select value={value.location ?? ""} onValueChange={(v) => onChange({ ...value, location: v })}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Preferred Location" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Bangalore">Bangalore</SelectItem>
+            <SelectItem value="Chennai">Chennai</SelectItem>
+            <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+            <SelectItem value="Delhi">Delhi</SelectItem>
+            <SelectItem value="Mumbai">Mumbai</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="h-px bg-gray-100 md:h-10 md:w-px" />
       <div className="flex items-center gap-3 flex-1">
         <img src="/logos/job-type.svg" alt="Job type" className="h-5 w-5" />
-        <select
-          className="w-full outline-none text-gray-700 rounded-xl"
-          value={value.jobType ?? ""}
-          onChange={(e) => onChange({ ...value, jobType: e.target.value as Filters["jobType"] })}
-        >
-          <option value="">Job type</option>
-          <option>Full-time</option>
-          <option>Part-time</option>
-          <option>Contract</option>
-          <option>Internship</option>
-        </select>
+        <Select value={value.jobType ?? ""} onValueChange={(v) => onChange({ ...value, jobType: (v as Filters["jobType"]) || undefined })}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Job type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Full-time">Full-time</SelectItem>
+            <SelectItem value="Part-time">Part-time</SelectItem>
+            <SelectItem value="Contract">Contract</SelectItem>
+            <SelectItem value="Internship">Internship</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       <div className="h-px bg-gray-100 md:h-10 md:w-px" />
   <div className="flex flex-col gap-2 md:gap-4 w-full md:w-auto md:ml-auto">
